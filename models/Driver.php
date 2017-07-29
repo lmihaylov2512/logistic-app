@@ -50,6 +50,7 @@ class Driver extends \yii\db\ActiveRecord
             'last_name' => 'Last Name',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
+            'fullName' => 'Name',
         ];
     }
 

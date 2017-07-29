@@ -33,9 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute' => 'driver_id',
-                'value' => function ($model) {
-                    return $model->driver->fullName;
-                },
+                'value' => 'driver.fullName',
                 'filter' => Html::activeDropDownList($searchModel, 'driver_id', DriverHelper::getDriversOptions(), ['prompt' => '-', 'class' => 'form-control']),
             ],
             'registration_number',

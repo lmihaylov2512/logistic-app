@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use app\helpers\TransportHelper;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Transport */
@@ -16,25 +17,25 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
-            ],
-        ]) ?>
     </p>
 
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
             'id',
-            'freight_id',
-            'status',
-            'start_at',
+            [
+                'attribute' => 'status',
+                'value' => function ($model) {
+                    return TransportHelper::getStatusOptions()[$model->status];
+                },
+            ],
+            'freight_id' => 'freight.name',
+            'truck.registration_number',
+            'truck.driver.fullName',
+            'start_at:date',
             'duration',
-            'created_at',
-            'updated_at',
+            'created_at:dateTime',
+            'updated_at:dateTime',
         ],
     ]) ?>
 

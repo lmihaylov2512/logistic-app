@@ -19,6 +19,7 @@ use app\helpers\{DatabaseHelper, TransportHelper, DateTimeHelper};
  *
  * @property Freight $freight
  * @property TransportTruck $transportTruck
+ * @property Truck $truck
  */
 class Transport extends \yii\db\ActiveRecord
 {
@@ -51,7 +52,7 @@ class Transport extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'freight_id' => 'Freight ID',
+            'freight_id' => 'Freight',
             'status' => 'Status',
             'start_at' => 'Start At',
             'duration' => 'Duration',

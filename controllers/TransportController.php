@@ -24,6 +24,8 @@ class TransportController extends Controller
                 'actions' => [
                     'delete' => ['POST'],
                     'remove-truck' => ['POST'],
+                    'start' => ['POST'],
+                    'complete' => ['POST'],
                 ],
             ],
         ];
@@ -66,12 +68,12 @@ class TransportController extends Controller
         $model = new Transport();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
+            return $this->redirect(['index']);
         }
+        
+        return $this->render('create', [
+            'model' => $model,
+        ]);
     }
 
     /**
@@ -83,14 +85,18 @@ class TransportController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
+        
+        if ($model->status != TransportHelper::STATUS_NOT_STARTED) {
+            return $this->redirect(['index']);
         }
+        
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['index']);
+        }
+        
+        return $this->render('update', [
+            'model' => $model,
+        ]);
     }
     
     /**
@@ -101,7 +107,11 @@ class TransportController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        
+        if ($model->status == TransportHelper::STATUS_NOT_STARTED) {
+            $model->delete();
+        }
         
         return $this->redirect(['index']);
     }
@@ -110,7 +120,7 @@ class TransportController extends Controller
     {
         $model = $this->findModel($id);
         
-        if ($model->status != TransportHelper::STATUS_NOT_STARTED && $model->transportTruck !== null) {
+        if ($model->status != TransportHelper::STATUS_NOT_STARTED || $model->transportTruck !== null) {
             return $this->redirect(['index']);
         }
         
@@ -129,13 +139,12 @@ class TransportController extends Controller
         $model = $this->findModel($id);
         
         if ($model->status != TransportHelper::STATUS_NOT_STARTED) {
-            Yii::$app->session->setFlash('warning', 'asdsadsa');
-            
             return $this->redirect(['index']);
         }
         
-        $model->transportTruck->delete();
-        Yii::$app->session->setFlash('success', 'Successfully removed the truck');
+        if ($model->transportTruck->delete()) {
+            Yii::$app->session->setFlash('success', 'Successfully removed the truck');
+        }
         
         return $this->redirect(['index']);
     }
@@ -144,9 +153,22 @@ class TransportController extends Controller
     {
         $model = $this->findModel($id);
         
-        if ($model->status != TransportHelper::STATUS_NOT_STARTED || $model->transportTruck === null) {
-            return $this->redirect(['index']);
+        if ($model->start()) {
+            return $this->redirect(['view', 'id' => $model->id]);
         }
+        
+        return $this->redirect(['index']);
+    }
+    
+    public function actionComplete($id)
+    {
+        $model = $this->findModel($id);
+        
+        if ($model->complete()) {
+            return $this->redirect(['view', 'id' => $model->id]);
+        }
+        
+        return $this->redirect(['index']);
     }
     
     /**

@@ -41,7 +41,7 @@ class TransportSearch extends Transport
      */
     public function search($params)
     {
-        $query = Transport::find();
+        $query = Transport::find()->joinWith(['freight', 'truck']);
 
         // add conditions that should always apply here
 

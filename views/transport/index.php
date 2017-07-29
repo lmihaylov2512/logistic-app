@@ -29,17 +29,19 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'attribute' => 'status',
-                'value' => function ($model) { return TransportHelper::getStatusOptions()[$model->status]; },
+                'value' => function ($model) {
+                    return TransportHelper::getStatusOptions()[$model->status];
+                },
                 'filter' => Html::activeDropDownList($searchModel, 'status', TransportHelper::getStatusOptions(), ['prompt' => '-', 'class' => 'form-control']),
-            ],
-            [
-                'attribute' => 'truck',
-                'value' => 'truck.registration_number',
             ],
             [
                 'attribute' => 'freight_id',
                 'value' => 'freight.name',
                 'filter' => Html::activeDropDownList($searchModel, 'freight_id', FreightHelper::getFreightsOptions(), ['prompt' => '-', 'class' => 'form-control']),
+            ],
+            [
+                'attribute' => 'truck',
+                'value' => 'truck.registration_number',
             ],
             [
                 'attribute' => 'start_at',
@@ -64,28 +66,40 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => 'Actions',
-                'template' => '{start} {complete} {add-truck} {remove-truck} {view} {update} {delete}',
+                'template' => '{add-truck} {remove-truck} {start} {complete} {view} {update} {delete}',
                 'buttons' => [
-                    'start' => function ($url) {
-                        return Html::a('<span class="glyphicon glyphicon-play-circle"></span>', $url, ['data' => ['method' => 'post']]);
-                    },
-                    'complete' => function ($url) {
-                        return Html::a('<span class="glyphicon glyphicon-remove-circle"></span>', $url, ['data' => ['method' => 'post']]);
-                    },
                     'add-truck' => function ($url) {
-                        return Html::a('<span class="glyphicon glyphicon-log-in"></span>', $url);
+                        return Html::a('<span class="glyphicon glyphicon-log-in"></span>', $url, ['title' => 'Add truck', 'aria-label' => 'Add truck']);
                     },
                     'remove-truck' => function ($url) {
-                        return Html::a('<span class="glyphicon glyphicon-log-out"></span>', $url, ['data' => ['method' => 'post']]);
+                        return Html::a('<span class="glyphicon glyphicon-log-out"></span>', $url, ['data' => ['method' => 'post'], 'title' => 'Remove truck', 'aria-label' => 'Remove truck']);
+                    },
+                    'start' => function ($url) {
+                        return Html::a('<span class="glyphicon glyphicon-play-circle"></span>', $url, ['data' => ['method' => 'post'], 'title' => 'Start transporting', 'aria-label' => 'Start transporting']);
+                    },
+                    'complete' => function ($url) {
+                        return Html::a('<span class="glyphicon glyphicon-remove-circle"></span>', $url, ['data' => ['method' => 'post'], 'title' => 'Complete transporting', 'aria-label' => 'Complete transporting']);
                     },
                 ],
                 'visibleButtons' => [
-                    'start' => function ($model) { return $model->status == TransportHelper::STATUS_NOT_STARTED && $model->truck !== null; },
-                    'complete' => function ($model) { return $model->status == TransportHelper::STATUS_TRANSPORTING; },
-                    'add-truck' => function ($model) { return $model->status == TransportHelper::STATUS_NOT_STARTED && $model->truck === null; },
-                    'remove-truck' => function ($model) { return $model->status == TransportHelper::STATUS_NOT_STARTED && $model->truck !== null; },
-                    'update' => function ($model) { return $model->status == TransportHelper::STATUS_NOT_STARTED; },
-                    'delete' => function ($model) { return $model->status == TransportHelper::STATUS_NOT_STARTED; },
+                    'add-truck' => function ($model) {
+                        return $model->status == TransportHelper::STATUS_NOT_STARTED && $model->transportTruck === null;
+                    },
+                    'remove-truck' => function ($model) {
+                        return $model->status == TransportHelper::STATUS_NOT_STARTED && $model->transportTruck !== null;
+                    },
+                    'start' => function ($model) {
+                        return $model->status == TransportHelper::STATUS_NOT_STARTED && $model->transportTruck !== null;
+                    },
+                    'complete' => function ($model) {
+                        return $model->status == TransportHelper::STATUS_TRANSPORTING;
+                    },
+                    'update' => function ($model) {
+                        return $model->status == TransportHelper::STATUS_NOT_STARTED;
+                    },
+                    'delete' => function ($model) {
+                        return $model->status == TransportHelper::STATUS_NOT_STARTED;
+                    },
                 ],
             ],
         ],

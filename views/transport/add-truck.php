@@ -4,7 +4,6 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use app\helpers\TruckHelper;
 
-
 /* @var $this yii\web\View */
 /* @var $model app\models\TransportTruck */
 
@@ -13,7 +12,7 @@ $this->params['breadcrumbs'][] = ['label' => 'Transports', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="transport-add-truck">
-
+    
     <h1><?= Html::encode($this->title) ?></h1>
 
     <?php $form = ActiveForm::begin(); ?>
@@ -25,5 +24,5 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
     
     <?php ActiveForm::end(); ?>
-
+    
 </div>
