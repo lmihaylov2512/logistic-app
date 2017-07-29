@@ -38,10 +38,10 @@ AppAsset::register($this);
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
             ['label' => 'Home', 'url' => ['/site/index']],
-            ['label' => 'Transports', 'url' => ['/transport']],
-            ['label' => 'Trucks', 'url' => ['/truck']],
-            ['label' => 'Drivers', 'url' => ['/driver']],
-            ['label' => 'Freights', 'url' => ['/freight']],
+            ['label' => 'Transports', 'url' => ['/transport/index']],
+            ['label' => 'Trucks', 'url' => ['/truck/index']],
+            ['label' => 'Drivers', 'url' => ['/driver/index']],
+            ['label' => 'Freights', 'url' => ['/freight/index']],
         ],
     ]);
     NavBar::end();
