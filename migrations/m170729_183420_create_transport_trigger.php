@@ -10,10 +10,14 @@ class m170729_183420_create_transport_trigger extends Migration
     public function up()
     {
         $this->execute(
-<<<AU
+<<<'AU'
 CREATE TRIGGER `transport_AU` AFTER UPDATE ON `transport` FOR EACH ROW
-BEGIN
+transport_AU:BEGIN
     DECLARE truck_status INT UNSIGNED;
+    
+    IF OLD.`status` = NEW.`status` THEN
+        LEAVE transport_AU;
+    END IF;
     
     CASE NEW.`status`
         WHEN 1 THEN SET truck_status = 2;

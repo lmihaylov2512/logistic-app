@@ -20,7 +20,7 @@ class m170729_132101_create_transport_truck_table extends Migration
             'created_at' => $this->timestamp()->notNull()->defaultExpression('CURRENT_TIMESTAMP'),
         ], DatabaseHelper::getTableOptions($this));
         
-        $this->addForeignKey('fk_transport_truck_transport_id', 'transport_truck', 'transport_id', 'transport', 'id', 'RESTRICT', 'CASCADE');
+        $this->addForeignKey('fk_transport_truck_transport_id', 'transport_truck', 'transport_id', 'transport', 'id', 'CASCADE', 'CASCADE');
         $this->addForeignKey('fk_transport_truck_truck_id', 'transport_truck', 'truck_id', 'truck', 'id', 'RESTRICT', 'CASCADE');
     }
 
